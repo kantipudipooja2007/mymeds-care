@@ -1,24 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import SplashScreen from "../components/SplashScreen";
+import Dashboard from "../components/Dashboard";
+import "../meditrack.css";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "MediTrack — Never miss a dose, ever again" },
+      {
+        name: "description",
+        content:
+          "MediTrack organizes your daily medicine schedule with clear reminders, one-tap tracking and a daily adherence view for patients and caregivers.",
+      },
+      { property: "og:title", content: "MediTrack — Never miss a dose, ever again" },
+      {
+        property: "og:description",
+        content:
+          "A simple, friendly medicine reminder dashboard: see every dose for today and tick it off with one tap.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  const [started, setStarted] = useState(false);
+  return started ? <Dashboard /> : <SplashScreen onStart={() => setStarted(true)} />;
 }
